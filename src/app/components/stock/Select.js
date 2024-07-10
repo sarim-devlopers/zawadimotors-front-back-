@@ -1,4 +1,9 @@
-import React, { useState } from 'react';
+'use client';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+
+
 import FilterMenu from './FilterMenu';
 import CarCard from '../ui/Card';
 import ListCar from './ListCar';
@@ -7,56 +12,77 @@ import Pagination from './TotalResult';
 import { FaTh, FaList } from 'react-icons/fa';
 
 // Dummy data for cars
-const cars = [
-  {
-    id: 1,
-    imageUrl: '/images/carSlider/car01.png',
-    name: 'Toyota Corolla',
-    year: 2023,
-    distance: 15000,
-    detail: "Good Condition car",
-    type: 'Sedan',
-    isNew: true,
-    link: '/cars/[id]',
-    features: ['Bluetooth', 'Backup Camera', 'Leather Seats'],
-    contactLink: '/contact/toyota-corolla',
-    calculateLink: '/loan-calculator'
-  },
-  {
-    id: 1,
-    imageUrl: '/images/carSlider/car01.png',
-    name: 'Toyota Corolla',
-    year: 2023,
-    distance: 15000,
-    detail: "Good Condition car",
-    type: 'Sedan',
-    isNew: true,
-    link: '/cars/[id]',
-    features: ['Bluetooth', 'Backup Camera', 'Leather Seats'],
-    contactLink: '/contact/toyota-corolla',
-    calculateLink: '/loan-calculator'
-  },
-  {
-    id: 1,
-    imageUrl: '/images/carSlider/car01.png',
-    name: 'Toyota Corolla',
-    year: 2023,
-    distance: 15000,
-    detail: "Good Condition car",
-    type: 'Sedan',
-    isNew: true,
-    link: '/cars/[id]',
-    features: ['Bluetooth', 'Backup Camera', 'Leather Seats'],
-    contactLink: '/contact/toyota-corolla',
-    calculateLink: '/loan-calculator'
-  },
-  // Add more car objects as needed
-];
+// const cars = [
+//   {
+//     id: 1,
+//     imageUrl: '/images/carSlider/car01.png',
+//     name: 'Toyota Corolla',
+//     year: 2023,
+//     distance: 15000,
+//     detail: "Good Condition car",
+//     type: 'Sedan',
+//     isNew: true,
+//     link: '/cars/[id]',
+//     features: ['Bluetooth', 'Backup Camera', 'Leather Seats'],
+//     contactLink: '/contact/toyota-corolla',
+//     calculateLink: '/loan-calculator'
+//   },
+//   {
+//     id: 1,
+//     imageUrl: '/images/carSlider/car01.png',
+//     name: 'Toyota Corolla',
+//     year: 2023,
+//     distance: 15000,
+//     detail: "Good Condition car",
+//     type: 'Sedan',
+//     isNew: true,
+//     link: '/cars/[id]',
+//     features: ['Bluetooth', 'Backup Camera', 'Leather Seats'],
+//     contactLink: '/contact/toyota-corolla',
+//     calculateLink: '/loan-calculator'
+//   },
+//   {
+//     id: 1,
+//     imageUrl: '/images/carSlider/car01.png',
+//     name: 'Toyota Corolla',
+//     year: 2023,
+//     distance: 15000,
+//     detail: "Good Condition car",
+//     type: 'Sedan',
+//     isNew: true,
+//     link: '/cars/[id]',
+//     features: ['Bluetooth', 'Backup Camera', 'Leather Seats'],
+//     contactLink: '/contact/toyota-corolla',
+//     calculateLink: '/loan-calculator'
+//   },
+//   // Add more car objects as needed
+// ];
 
 const ITEMS_PER_PAGE = 8; // Define items per page for grid view
 const LIST_ITEMS_PER_PAGE = 5; // Define items per page for list view
 
 const IndexPage = () => {
+  const [loading, setLoading] = useState(true);
+  const [cars, setCars] = useState([]);
+
+  const fetchCars = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/cars');
+      setCars(response.data);
+    } catch (error) {
+      console.error('Error fetching cars:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch cars and set loading state
+    const loadData = async () => {
+      await fetchCars();
+      setLoading(false);
+    };
+    loadData();
+  }, []);
+
   // State for filters and search keyword
   const [filters, setFilters] = useState({});
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -126,7 +152,7 @@ const IndexPage = () => {
               <CarCard
                 key={car.id}
                 id={car.id}
-                imageUrl={car.imageUrl}
+                imageUrl={car.image}
                 name={car.name}
                 year={car.year}
                 distance={car.distance}
@@ -138,7 +164,7 @@ const IndexPage = () => {
           </div>
         ) : (
           currentItems.map((car) => (
-            <ListCar key={car.id} car={car} />
+            <ListCar id={car.id} imageUrl={car.image} name={car.name} details={car.driveType} year={car.year} distance={car.distance} type={car.type} isNew={car.isNew}  />
           ))
         )}
       </div>

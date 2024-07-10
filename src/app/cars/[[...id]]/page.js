@@ -1,83 +1,63 @@
-"use client"
-import React, { useState } from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Loader from '../../components/Loader';
 import Header from '../../components/Header';
 import { FaPaperPlane, FaWhatsapp, FaArrowLeft, FaArrowRight, FaCheck } from 'react-icons/fa';
 
 const CarDetails = ({ params }) => {
-  const { id } = params;
-
-  // Replace this with your actual data fetching logic
-  const carDetails = {
-    1: {
-      name: 'Toyota Corolla',
-      year: 2023,
-      distance: 15000,
-      type: 'Sedan',
-      isNew: true,
-      images: ['/images/carSlider/car01.png', '/images/carSlider/car02.png', '/images/carSlider/car03.png'],
-      make: 'Toyota',
-      model: 'Corolla',
-      driveType: 'FWD',
-      transmission: 'Automatic',
-      condition: 'New',
-      mileage: '15,000Km',
-      fuelType: 'Petrol',
-      engineSize: '1,800.0L',
-      doors: '4-door',
-      safetyFeatures: [
-        'Active head restraints', 'Adaptive headlights', 'Anti-lock brakes', 'Backup camera', 'Blind-spot warning',
-        'Brake assist', 'Forward-collision warning', 'Front airbags', 'Lane departure warning', 'Lane keeping assist',
-        'Parking assist systems', 'Passenger airbag', 'Pedestrian detection', 'Responsive seatbelts', 'Side airbag',
-        'Sideview camera', 'Tire pressure monitor'
-      ],
-      features: [
-        'Air Conditioning', 'Alloy Wheels', 'Bluetooth', 'Cruise Control', 'Navigation System', 'Sunroof', 'Leather Seats'
-      ]
-    },
-    2: {
-      name: 'Honda Civic',
-      year: 2022,
-      distance: 20000,
-      type: 'Sedan',
-      isNew: false,
-      images: ['/images/carSlider/car02.png', '/images/carSlider/car03.png'],
-      make: 'Honda',
-      model: 'Civic',
-      driveType: 'FWD',
-      transmission: 'Automatic',
-      condition: 'Used',
-      mileage: '20,000Km',
-      fuelType: 'Petrol',
-      engineSize: '2,000.0L',
-      doors: '4-door',
-      safetyFeatures: [
-        'Active head restraints', 'Adaptive headlights', 'Anti-lock brakes', 'Backup camera', 'Blind-spot warning',
-        'Brake assist', 'Forward-collision warning', 'Front airbags', 'Lane departure warning', 'Lane keeping assist',
-        'Parking assist systems', 'Passenger airbag', 'Pedestrian detection', 'Responsive seatbelts', 'Side airbag',
-        'Sideview camera', 'Tire pressure monitor'
-      ],
-      features: [
-        'Air Conditioning', 'Alloy Wheels', 'Bluetooth', 'Cruise Control', 'Navigation System', 'Sunroof', 'Leather Seats'
-      ]
-    }
-    // Add more car details as needed
-  };
-
-  const car = carDetails[id];
-
-  if (!car) {
-    return <div>Car not found</div>;
-  }
-
+  const [loading, setLoading] = useState(true);
+  const [car, setCar] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const { id } = params;
+
+  useEffect(() => {
+    // Fetch car details from the backend
+    const fetchCarDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/cars/${id}`);
+        setCar(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching car details:', error);
+        setLoading(false); // In case of error, stop loading as well
+      }
+    };
+
+    fetchCarDetails();
+
+    return () => clearTimeout(); // Clear any pending timers if the component unmounts
+  }, [id]);
+
   const nextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % car.images.length);
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % (car?.images.length || 1));
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + car.images.length) % car.images.length);
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + (car?.images.length || 1)) % (car?.images.length || 1));
   };
+
+  if (loading) {
+    return (
+      <section className="w-full h-screen xl:h-full sm:h-[70vh]">
+        <Header />
+        <Loader />
+      </section>
+    );
+  }
+console.log(car) //this is showing null
+  if (!car) {
+    return (
+      <section className="w-full h-screen xl:h-full sm:h-[70vh]">
+        <Header />
+        <div className="container mx-auto py-28 text-center">
+          <h1 className="text-3xl font-bold mb-4">Car not found</h1>
+          <p className="text-lg">The car you're looking for doesn't exist.</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="w-full h-screen xl:h-full sm:h-[70vh]">
@@ -89,37 +69,36 @@ const CarDetails = ({ params }) => {
             <p className="text-lg mb-2">Year: {car.year} | Distance: {car.distance} km | Type: {car.type}</p>
             <div className="border-b-2 border-gray-300 my-4"></div>
             <div className="relative">
-  <img src={car.images[currentImageIndex]} alt={car.name} className="w-full h-auto mb-4" />
-  <button
-    onClick={prevImage}
-    className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full"
-  >
-    <FaArrowLeft />
-  </button>
-  <button
-    onClick={nextImage}
-    className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full"
-  >
-    <FaArrowRight />
-  </button>
-  <div className="absolute bottom-8 left-0 right-0 flex justify-left p-2 bg-black bg-opacity-0 text-black">
-    {currentImageIndex + 1}/{car.images.length}
-  </div>
-  <div className="absolute bottom-0 left-0 right-0 flex justify-center p-2 bg-black bg-opacity-0 space-x-2">
-    {car.images.map((image, index) => (
-      <img
-        key={index}
-        src={image}
-        alt={`Thumbnail ${index + 1}`}
-        className={`w-20 h-20 object-cover rounded-full cursor-pointer transform transition duration-300 ${
-          index === currentImageIndex ? 'ring-4 ring-gray-200' : 'hover:scale-110 hover:ring-2 hover:ring-white'
-        }`}
-        onClick={() => setCurrentImageIndex(index)}
-      />
-    ))}
-  </div>
-</div>
-
+              <img src={car.images[currentImageIndex]} alt={car.name} className="w-full h-auto mb-4" />
+              <button
+                onClick={prevImage}
+                className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full"
+              >
+                <FaArrowLeft />
+              </button>
+              <button
+                onClick={nextImage}
+                className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full"
+              >
+                <FaArrowRight />
+              </button>
+              <div className="absolute bottom-8 left-0 right-0 flex justify-left p-2 bg-black bg-opacity-0 text-black">
+                {currentImageIndex + 1}/{car.images.length}
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 flex justify-center p-2 bg-black bg-opacity-0 space-x-2">
+                {car.images.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt={`Thumbnail ${index + 1}`}
+                    className={`w-20 h-20 object-cover rounded-full cursor-pointer transform transition duration-300 ${
+                      index === currentImageIndex ? 'ring-4 ring-gray-200' : 'hover:scale-110 hover:ring-2 hover:ring-white'
+                    }`}
+                    onClick={() => setCurrentImageIndex(index)}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
           <div className="w-full lg:w-1/3 lg:pl-8">
             <h1 className="h2">Contact for a price</h1>
@@ -170,20 +149,19 @@ const CarDetails = ({ params }) => {
                 Send <FaPaperPlane className="ml-2" />
               </button>
             </form>
-        
           </div>
         </div>
         <div className="mt-8 bg-gray-300">
-  <h2 className="text-2xl font-bold mb-4 bg-white">Safety Features</h2>
-  <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 ">
-    {car.safetyFeatures.map((feature, index) => (
-      <li key={index} className="mb-1 flex items-center">
-        <FaCheck className="text-green-500 mr-2 bg-white" />
-        <span className='bg-white rounded-lg p-2'>{feature}</span>
-      </li>
-    ))}
-  </ul>
-</div>
+          <h2 className="text-2xl font-bold mb-4 bg-white">Safety Features</h2>
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 ">
+            {car.safetyFeatures.map((feature, index) => (
+              <li key={index} className="mb-1 flex items-center">
+                <FaCheck className="text-green-500 mr-2 bg-white" />
+                <span className='bg-white rounded-lg p-2'>{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <div className="mt-8">
           <h2 className="text-2xl font-bold mb-4">Features</h2>

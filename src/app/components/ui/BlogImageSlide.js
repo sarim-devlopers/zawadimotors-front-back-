@@ -17,12 +17,21 @@ const BlogImageSlide = () => {
   }, [images.length]);
 
   return (
-    <div className="relative overflow-hidden h-96 md:h-screen lg:h-[90vh]">
+    <div className="relative overflow-hidden h-96 md:h-[70vh] lg:h-[80vh]">
       <div className="absolute inset-0 flex transition-transform duration-1000 ease-in-out" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
         {images.map((image, index) => (
           <div key={index} className="w-full h-full flex-shrink-0">
             <img src={image} alt={`Slide ${index + 1}`} className="w-full h-full object-cover" />
           </div>
+        ))}
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 flex justify-center p-4 bg-opacity-50 bg-black">
+        {images.map((_, index) => (
+          <div
+            key={index}
+            className={`w-2 h-2 mx-1 rounded-full ${currentIndex === index ? 'bg-white' : 'bg-gray-400'}`}
+            onClick={() => setCurrentIndex(index)}
+          />
         ))}
       </div>
     </div>

@@ -26,39 +26,60 @@ const Header = () => {
 
   return (
     <header className={`${header ? 'bg-white shadow-md py-2' : 'bg-primary shadow-none text-white py-4'} fixed w-full max-w-[1920px] mx-auto z-20 transition-all duration-300`}>
-      <div className="xl:container mx-auto flex flex-col xl:flex-row xl:items-center xl:justify-between ">
-        <div className="flex justify-between items-center px-4">
+      <div className="container mx-auto flex flex-col md:flex-row md:items-center md:justify-between px-4 md:px-8">
+        <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" legacyBehavior>
             <a className="cursor-pointer">
-              <Image src="/icons/logo.svg" width={194} height={64} alt="Logo" />
+              <Image src="/icons/logo.svg" width={10} height={10} alt="Logo" className=" w-32 h-20" />
             </a>
           </Link>
+          <div onClick={() => setNav(!nav)} className="cursor-pointer md:hidden">
+            {nav ? (<BiX className="text-4xl text-white" />) : (<BiMenuAltRight className="text-4xl text-white" />)}
+          </div>
         </div>
-        <div onClick={() => setNav(!nav)} className="cursor-pointer xl:hidden">
-          {nav ? (<BiX className="text-4xl" />) : (<BiMenuAltRight className="text-4xl" />)}
-        </div>
-        <nav className={`${nav ? 'max-h-max py-8 px-4 xl:py-0 xl:px-0' : 'max-h-0 xl:max-h-max'} flex flex-col w-full bg-white gap-y-6 overflow-hidden font-bold xl:font-medium xl:flex-row xl:w-max xl:gap-x-8 xl:h-max xl:bg-transparent xl:pb-0 transition-all duration-150 text-center xl:text-left uppercase text-sm xl:text-[15px] xl:normal-case`}>
+        <nav className={`${nav ? 'max-h-max py-8 px-4 md:py-0 md:px-0' : 'max-h-0 md:max-h-max'} flex flex-col w-full bg-white md:bg-transparent gap-y-6 overflow-hidden font-bold md:font-medium md:flex-row md:w-max md:gap-x-8 md:h-max md:pb-0 transition-all duration-150 text-center md:text-left uppercase text-sm md:text-[15px] md:normal-case`}>
           <Link href="/" legacyBehavior>
-            <a className="cursor-pointer">Home</a>
+            <a className="relative group cursor-pointer">
+              Home
+              <span className="absolute left-0 bottom-0 h-0.5 w-full bg-cyan-500 transform -translate-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+            </a>
           </Link>
           <Link href="/stocklist" legacyBehavior>
-            <a className="cursor-pointer">Stock list</a>
+            <a className="relative group cursor-pointer">
+              Stock list
+              <span className="absolute left-0 bottom-0 h-0.5 w-full bg-cyan-500 transform -translate-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+            </a>
           </Link>
           <Link href="/aboutus" legacyBehavior>
-            <a className="cursor-pointer">About us</a>
+            <a className="relative group cursor-pointer">
+              About us
+              <span className="absolute left-0 bottom-0 h-0.5 w-full bg-cyan-500 transform -translate-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+            </a>
           </Link>
           <Link href="/finance" legacyBehavior>
-            <a className="cursor-pointer">Financing</a>
+            <a className="relative group cursor-pointer">
+              Financing
+              <span className="absolute left-0 bottom-0 h-0.5 w-full bg-cyan-500 transform -translate-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+            </a>
           </Link>
           <Link href="/coming-soon" legacyBehavior>
-            <a className="cursor-pointer">Coming Soon</a>
+            <a className="relative group cursor-pointer">
+              Coming Soon
+              <span className="absolute left-0 bottom-0 h-0.5 w-full bg-cyan-500 transform -translate-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+            </a>
           </Link>
           <Link href="/contact" legacyBehavior>
-            <a className="cursor-pointer">Contact Us</a>
+            <a className="relative group cursor-pointer">
+              Contact Us
+              <span className="absolute left-0 bottom-0 h-0.5 w-full bg-cyan-500 transform -translate-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+            </a>
           </Link>
           <Link href="/blog" legacyBehavior>
-            <a className="cursor-pointer">Blog</a>
+            <a className="relative group cursor-pointer">
+              Blog
+              <span className="absolute left-0 bottom-0 h-0.5 w-full bg-cyan-500 transform -translate-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+            </a>
           </Link>
         </nav>
       </div>

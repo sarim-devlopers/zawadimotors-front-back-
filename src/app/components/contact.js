@@ -51,7 +51,7 @@ const Contact = () => {
           <div className="mb-4">
             <label className="inline-flex items-center">
               <input type="checkbox" className="form-checkbox h-5 w-5 text-indigo-600" required />
-              <span className="ml-2 text-gray-700">I agree to the <a href="/privacy-policy" className="text-indigo-600 underline">privacy policy</a></span>
+              <span className="ml-2 text-gray-700">I agree to the <a href="/stocklist" className="text-indigo-600 underline">privacy policy</a></span>
             </label>
           </div>
           <button type="submit" className="w-full bg-accent text-white px-4 py-2 rounded-md flex items-center justify-center hover:bg-accent-dark">

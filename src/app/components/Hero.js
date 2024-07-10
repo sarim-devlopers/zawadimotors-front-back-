@@ -1,128 +1,56 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import AutoSlidingCarousel from './AutoSlidingCarousel';
 import CarCard from './ui/Card'; // Adjust the import path as needed
 import InfoCard from './ui/InfoCard'; // Adjust the import path as needed
 
 const Hero = () => {
-  const cars = [
-    {
-      id: 1,
-      imageUrl: '/images/carSlider/car01.png', // Example image path, adjust as needed
-      name: 'Toyota Corolla',
-      year: 2023,
-      distance: 15000,
-      type: 'Sedan',
-      isNew: true,
-      link: '/car-details/toyota-corolla', // Example link, adjust as needed
-    },
-    {
-      id: 2,
-      imageUrl: '/images/carSlider/car02.png',
-      name: 'Honda Civic',
-      year: 2022,
-      distance: 20000,
-      type: 'Sedan',
-      isNew: false,
-      link: '/car-details/honda-civic',
-    },
-    {
-      id: 3,
-      imageUrl: '/images/carSlider/car03.png',
-      name: 'Ford Mustang',
-      year: 2021,
-      distance: 10000,
-      type: 'Coupe',
-      isNew: false,
-      link: '/car-details/ford-mustang',
-    },
-   
-  ];
+  const [loading, setLoading] = useState(true);
+  const [cars, setCars] = useState([]);
 
-  const cars2 = [
-    {
-      id: 5,
-      imageUrl: '/images/carSlider/car01.png',
-      name: 'Toyota Corolla',
-      year: 2023,
-      distance: 15000,
-      type: 'Sedan',
-      isNew: true,
-      link: '/car-details/toyota-corolla',
-    },
-    {
-      id: 6,
-      imageUrl: '/images/carSlider/car01.png',
-      name: 'Toyota Corolla',
-      year: 2023,
-      distance: 15000,
-      type: 'Sedan',
-      isNew: true,
-      link: '/car-details/toyota-corolla',
-    },
-    {
-      id: 7,
-      imageUrl: '/images/carSlider/car01.png',
-      name: 'Toyota Corolla',
-      year: 2023,
-      distance: 15000,
-      type: 'Sedan',
-      isNew: true,
-      link: '/car-details/toyota-corolla',
-    },
-    {
-      id: 8,
-      imageUrl: '/images/carSlider/car01.png',
-      name: 'Toyota Corolla',
-      year: 2023,
-      distance: 15000,
-      type: 'Sedan',
-      isNew: true,
-      link: '/car-details/toyota-corolla',
-    },
-    {
-      id: 9,
-      imageUrl: '/images/carSlider/car02.png',
-      name: 'Honda Civic',
-      year: 2022,
-      distance: 20000,
-      type: 'Sedan',
-      isNew: false,
-      link: '/car-details/honda-civic',
-    },
-    {
-      id: 10,
-      imageUrl: '/images/carSlider/car03.png',
-      name: 'Ford Mustang',
-      year: 2021,
-      distance: 10000,
-      type: 'Coupe',
-      isNew: false,
-      link: '/car-details/ford-mustang',
-    },
-  ];
+  const fetchCars = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/cars');
+      setCars(response.data);
+    } catch (error) {
+      console.error('Error fetching cars:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch cars and set loading state
+    const loadData = async () => {
+      await fetchCars();
+      setLoading(false);
+    };
+    loadData();
+  }, []);
 
   return (
-    <section className="w-full h-screen xl:h-full sm:h-[70vh]">
-      <AutoSlidingCarousel />
+    <section className="w-full h-full sm:h-auto pt-8">
+      <div className="hidden sm:block">
+        <AutoSlidingCarousel />
+      </div>
 
-      <div className="text-center mt-16 xl:mt-0">
-        <h1 className="h1">Welcome to <span className="text-accent">Zawadi</span> Motors</h1>
-        <p className="description mx-auto xl:mx-0 mb-6 xl:mb-10 font-semibold">
+      <div className="text-center mt-8 sm:mt-16">
+        <h1 className="text-3xl sm:text-4xl font-bold">Welcome to <span className="text-accent">Zawadi</span> Motors</h1>
+        <p className="text-base sm:text-lg mx-auto sm:mx-0 mb-4 sm:mb-6 font-semibold">
           Are you in the market for a new ride? Look no further than Al-Siddique Motors! Our showroom is stocked with the latest models from top brands like Toyota, Mercedes, Land Rover, and many more.
         </p>
       </div>
 
-      <div className="text-center mt-16 xl:mt-0">
-        <h1 className="h1">Featured Listings</h1>
+      <div className="text-center mt-8 sm:mt-16">
+        <h1 className="text-3xl sm:text-4xl font-bold">Featured Listings</h1>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 p-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 p-4">
         {cars.map((car) => (
           <CarCard
             key={car.id}
             id={car.id}
-            imageUrl={car.imageUrl}
+            imageUrl={car.image}
             name={car.name}
             year={car.year}
             distance={car.distance}
@@ -133,10 +61,10 @@ const Hero = () => {
         ))}
       </div>
 
-      <div className="text-center mt-16 xl:mt-0">
-        <h1 className="h1">Why <span className='text-accent'>Choose</span> us?</h1>
+      <div className="text-center mt-8 sm:mt-16">
+        <h1 className="text-3xl sm:text-4xl font-bold">Why <span className='text-accent'>Choose</span> us?</h1>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 p-4">
         <InfoCard
           icon="/path/to/icon1.svg"
           heading="Wide range of brands"
@@ -154,16 +82,16 @@ const Hero = () => {
         />
       </div>
 
-      <div className="text-center mt-16 xl:mt-0">
-        <h1 className="h1">Our Listings</h1>
+      <div className="text-center mt-8 sm:mt-16">
+        <h1 className="text-3xl sm:text-4xl font-bold">Our Listings</h1>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 p-4">
-        {cars2.map((car) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 p-4">
+        {cars.map((car) => (
           <CarCard
             key={car.id}
             id={car.id}
-            imageUrl={car.imageUrl}
+            imageUrl={car.image}
             name={car.name}
             year={car.year}
             distance={car.distance}

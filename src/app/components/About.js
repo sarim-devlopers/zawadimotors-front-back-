@@ -2,14 +2,24 @@
 import FAQCard from './ui/faq'
 import BookTestDriveButton from './ui/whatsapp'
 const About = () => {
+
+  //fetch from backend ( soon i will do it )
   const faqs = [
     {
-      question: 'What is React?',
-      answer: 'React is a JavaScript library for building user interfaces.',
+      question: 'Do you offer hire-purchase?',
+      answer: 'At our dealership, we’re pleased to offer flexible hire purchase options to help you acquire your dream vehicle with ease. With our hire purchase program, you can spread the cost of your purchase over a set period, making manageable monthly payments that fit your budget.',
     },
     {
-      question: 'How do you use React?',
-      answer: 'You can use React by creating components and using JSX to render them.',
+      question: 'What payment options do you have?',
+      answer: 'At our dealership, we take pride in offering a wide variety of cars to suit every taste, lifestyle, and budget. Whether you’re in the market for a compact sedan, a spacious SUV, a rugged truck, or a sleek sports car, we have something for everyone',
+    },
+    {
+      question: 'How much do I need to get a car?',
+      answer: 'You can pay as low as, 500,000ksh, and drive away with the car of your dreams',
+    },
+    {
+      question: 'Do you import vehicles on behalf?',
+      answer: 'Yes. Here at Al-Siddique motors we import vehicles from all over the world to our clients.',
     },
     // Add more FAQs here
   ];

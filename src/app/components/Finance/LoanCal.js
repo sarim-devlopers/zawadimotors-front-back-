@@ -31,7 +31,7 @@ const LoanCalculator = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg ">
       <h2 className="text-2xl font-semibold mb-4">Loan Calculator</h2>
       <p className="mb-4">
         Use our loan calculator to calculate payments over the life of your loan. Enter your information to see how much your monthly payments could be. You can adjust the length of the loan, down payment, and interest rate to see how those changes raise or lower your payments.

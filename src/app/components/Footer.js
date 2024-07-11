@@ -67,8 +67,8 @@ const Footer = () => {
         </div>
 
         {/* Footer Bottom */}
-        <div className="text-center mt-8">
-          <p className="text-sm">&copy; {new Date().getFullYear()} Zawadi Motors. All rights reserved.</p>
+        <div className="text-center mt-6 sm:mt-8">
+        <p className="text-xs sm:text-sm">&copy; {new Date().getFullYear()} Zawadi Motors. All rights reserved.</p>
         </div>
       </div>
     </footer>

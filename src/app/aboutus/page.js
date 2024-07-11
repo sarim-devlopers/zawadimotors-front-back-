@@ -26,11 +26,11 @@ export default function Home() {
       ) : (
       <main className="container mx-auto pt-20 pb-10 p-4">
         {/* Main content goes here */}
-        <div>
+        <div className='py-10'>
        <About/>
       </div>
       </main>)}
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

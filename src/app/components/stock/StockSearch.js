@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const SearchBar = ({ handleSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -8,9 +9,14 @@ const SearchBar = ({ handleSearch }) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    handleSearch(searchTerm);
+    try {
+      const response = await axios.get(`http://localhost:5000/api/cars/search?term=${searchTerm}`);
+      handleSearch(response.data);
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
   };
 
   return (

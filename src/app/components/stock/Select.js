@@ -2,61 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
-
 import FilterMenu from './FilterMenu';
 import CarCard from '../ui/Card';
 import ListCar from './ListCar';
 import SearchBar from './StockSearch';
+import SearchResults from './searchResult';
 import Pagination from './TotalResult';
 import { FaTh, FaList } from 'react-icons/fa';
-
-// Dummy data for cars
-// const cars = [
-//   {
-//     id: 1,
-//     imageUrl: '/images/carSlider/car01.png',
-//     name: 'Toyota Corolla',
-//     year: 2023,
-//     distance: 15000,
-//     detail: "Good Condition car",
-//     type: 'Sedan',
-//     isNew: true,
-//     link: '/cars/[id]',
-//     features: ['Bluetooth', 'Backup Camera', 'Leather Seats'],
-//     contactLink: '/contact/toyota-corolla',
-//     calculateLink: '/loan-calculator'
-//   },
-//   {
-//     id: 1,
-//     imageUrl: '/images/carSlider/car01.png',
-//     name: 'Toyota Corolla',
-//     year: 2023,
-//     distance: 15000,
-//     detail: "Good Condition car",
-//     type: 'Sedan',
-//     isNew: true,
-//     link: '/cars/[id]',
-//     features: ['Bluetooth', 'Backup Camera', 'Leather Seats'],
-//     contactLink: '/contact/toyota-corolla',
-//     calculateLink: '/loan-calculator'
-//   },
-//   {
-//     id: 1,
-//     imageUrl: '/images/carSlider/car01.png',
-//     name: 'Toyota Corolla',
-//     year: 2023,
-//     distance: 15000,
-//     detail: "Good Condition car",
-//     type: 'Sedan',
-//     isNew: true,
-//     link: '/cars/[id]',
-//     features: ['Bluetooth', 'Backup Camera', 'Leather Seats'],
-//     contactLink: '/contact/toyota-corolla',
-//     calculateLink: '/loan-calculator'
-//   },
-//   // Add more car objects as needed
-// ];
 
 const ITEMS_PER_PAGE = 8; // Define items per page for grid view
 const LIST_ITEMS_PER_PAGE = 5; // Define items per page for list view
@@ -64,53 +16,56 @@ const LIST_ITEMS_PER_PAGE = 5; // Define items per page for list view
 const IndexPage = () => {
   const [loading, setLoading] = useState(true);
   const [cars, setCars] = useState([]);
-
-  const fetchCars = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/api/cars');
-      setCars(response.data);
-    } catch (error) {
-      console.error('Error fetching cars:', error);
-    }
-  };
-
-  useEffect(() => {
-    // Fetch cars and set loading state
-    const loadData = async () => {
-      await fetchCars();
-      setLoading(false);
-    };
-    loadData();
-  }, []);
-
-  // State for filters and search keyword
+  const [filteredCars, setFilteredCars] = useState([]);
   const [filters, setFilters] = useState({});
   const [searchKeyword, setSearchKeyword] = useState('');
-  // State for view mode
   const [viewMode, setViewMode] = useState('list'); // default is 'list'
-  // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/cars');
+        setCars(response.data);
+        setFilteredCars(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching cars:', error);
+      }
+    };
+    fetchCars();
+  }, []);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
-  const totalItems = cars.length;
+  const totalItems = filteredCars.length;
   const itemsPerPage = viewMode === 'grid' ? ITEMS_PER_PAGE : LIST_ITEMS_PER_PAGE;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const currentItems = cars.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const currentItems = filteredCars.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  // Function to handle filter application
-  const applyFilters = () => {
-    // Logic to apply filters and fetch filtered cars
-    // Update cars array based on filters
+  const applyFilters = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/cars/filteredCars', {
+        params: filters,
+      });
+      setFilteredCars(response.data);
+      setCurrentPage(1);
+    } catch (error) {
+      console.error('Error applying filters', error);
+    }
   };
 
-  // Function to handle search
-  const handleSearch = (keyword) => {
-    setSearchKeyword(keyword);
-    // Logic to filter cars based on search keyword
-    // Update cars array based on search
+  const clearFilters = () => {
+    setFilters({});
+    setFilteredCars(cars);
+    setCurrentPage(1);
+  };
+
+  const handleSearch = (results) => {
+    setSearchResults(results);
   };
 
   return (
@@ -121,15 +76,15 @@ const IndexPage = () => {
             filters={filters}
             setFilters={setFilters}
             applyFilters={applyFilters}
-            clearFilters={() => setFilters({})}
+            clearFilters={clearFilters}
           />
         </div>
       </div>
       <div className="ml-auto w-full max-w-sm hidden sm:block pl-20">
         <SearchBar handleSearch={handleSearch} />
+        <SearchResults results={searchResults} />
       </div>
       <hr className="my-6 border-gray-300" /> {/* Horizontal line */}
-
       <div className="flex items-center mb-4">
         <button
           onClick={() => setViewMode('grid')}
@@ -164,7 +119,17 @@ const IndexPage = () => {
           </div>
         ) : (
           currentItems.map((car) => (
-            <ListCar id={car.id} imageUrl={car.image} name={car.name} details={car.driveType} year={car.year} distance={car.distance} type={car.type} isNew={car.isNew}  />
+            <ListCar
+              key={car.id}
+              id={car.id}
+              imageUrl={car.image}
+              name={car.name}
+              details={car.driveType}
+              year={car.year}
+              distance={car.distance}
+              type={car.type}
+              isNew={car.isNew}
+            />
           ))
         )}
       </div>
@@ -174,10 +139,6 @@ const IndexPage = () => {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
-
-      <div className="mt-8">
-        {/* Additional content if needed */}
-      </div>
     </div>
   );
 };

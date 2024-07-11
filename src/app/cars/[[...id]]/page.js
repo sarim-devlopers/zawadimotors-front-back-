@@ -163,13 +163,13 @@ console.log(car) //this is showing null
           </ul>
         </div>
 
-        <div className="mt-8">
-          <h2 className="text-2xl font-bold mb-4">Features</h2>
+        <div className="mt-8 bg-gray-300 rounded-xl">
+          <h2 className="text-2xl font-bold mb-4 bg-white">Features</h2>
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {car.features.map((feature, index) => (
               <li key={index} className="mb-1 flex items-center ">
-                <FaCheck className="text-green-500 mr-2 " />
-                <span className='bg-gray-300 rounded-lg p-2'>{feature}</span>
+                <FaCheck className="text-green-500 mr-2 bg-white " />
+                <span className='bg-white rounded-lg p-2'>{feature}</span>
               </li>
             ))}
           </ul>

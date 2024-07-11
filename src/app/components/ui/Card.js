@@ -32,7 +32,7 @@ const CarCard = ({ id, imageUrl, name, year, distance, type, isNew }) => {
 
   return (
     <motion.div
-      className="w-full max-w-3xl lg:max-w-4xl xl:max-w-5xl rounded-lg overflow-hidden shadow-lg m-4 transition-transform duration-300 ease-in-out transform hover:scale-105 cursor-pointer bg-white border-2 border-gray-300"
+      className="relative w-full max-w-3xl lg:max-w-4xl xl:max-w-5xl rounded-lg overflow-hidden shadow-lg m-4 transition-transform duration-300 ease-in-out transform hover:scale-105 cursor-pointer bg-gradient-to-r from-gray-100 to-gray-200 border-2 border-primary"
       onClick={handleCardClick}
       variants={slideInBlink}
       initial="hidden"
@@ -52,7 +52,7 @@ const CarCard = ({ id, imageUrl, name, year, distance, type, isNew }) => {
         <p className="text-gray-600 text-base mb-4">Type: {type}</p>
       </div>
       <div className="px-8 py-6 text-center">
-        <span className="inline-block bg-yellow-500 rounded-full px-5 py-2 text-sm font-semibold text-white">
+        <span className="inline-block bg-yellow-500 rounded-full px-5 py-2 text-sm font-semibold text-white shadow-md hover:bg-yellow-600 hover:shadow-lg transition duration-300">
           Contact for Price
         </span>
       </div>
